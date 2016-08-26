@@ -1,0 +1,21 @@
+{
+  "name": "api-etouches-question-list",
+  "version": "1.0.0",
+  "description": "Discover the possible fields to pull for an eTouches event.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "eTouches",
+    "API",
+    "Validar"
+  ],
+  "author": "Curtis Rodgers",
+  "url" : "https://github.com/C-Rodg/Api-eTouches-questionId-exporter.git"
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.4.3",
+    "xml2js": "^0.4.17"
+  }
+}
