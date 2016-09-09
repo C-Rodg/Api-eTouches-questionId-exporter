@@ -3,9 +3,9 @@ var Promise = require('bluebird'),
 	fs 		= require('fs'),
 	parseString  = require('xml2js').parseString;
 
-var c_ACCOUNT_ID = "",
-	c_API_KEY 	 = "",
-	c_EVENT_ID 	 = "",
+var c_ACCOUNT_ID = "", 					// CHANGE
+	c_API_KEY 	 = "",  				// CHANGE
+	c_EVENT_ID 	 = "",					// CHANGE
 	loginToken 	 = "";
 
 var get_URL = "https://www.eiseverywhere.com/api/v2/ereg/",
@@ -115,6 +115,25 @@ function convertListFromXml(xmlRegistrants) {
 	});
 }
 
+var tryToLocate = true;
+function locateField(regList) {
+	return new Promise(function(resolve, reject) {	
+		var fieldName = "10433858";		
+		if(tryToLocate) {
+			console.log("The following people have values for fieldname - " + fieldName);
+			regList.forEach(function(person) {
+				var questionList = person.etouches.responses[0].item;
+				questionList.forEach(function(question) {					
+					if(question.fieldname[0] === fieldName) {
+						console.log(person.etouches.attendeeid);
+					}
+				});
+			});
+		}		
+		resolve(regList);
+	});
+}
+
 function listResponses(regList) {
 	return new Promise(function(resolve, reject) {
 		var responsesList = regList.map(function(registrant) {
@@ -133,7 +152,7 @@ function oneArray(responseList) {
 
 function selectFields(questionList) {
 	return new Promise(function(resolve, reject) {
-		var questionFieldList = questionList.map(function(question) {
+		var questionFieldList = questionList.map(function(question) {		
 			return {
 				fieldname : question.fieldname[0],
 				name 	  : question.name[0]
@@ -183,7 +202,8 @@ login().then(function(req) {
 	return getRegistrants(idList);
 }).then(function(xmlRegistrants) {
 	return convertListFromXml(xmlRegistrants);
-	//fs.writeFile('test2.txt', registrants);
+}).then(function(personList) { 
+	return locateField(personList);
 }).then(function(jsonRegistrants) {
 	return listResponses(jsonRegistrants);
 }).then(function(responseList) {
